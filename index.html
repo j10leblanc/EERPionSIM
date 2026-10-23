@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EER: Stepped Deterministic Pion Exchange</title>
+    <title>EER: Entangled Boundary & 2-Axis Pion Shear Defect</title>
     <style>
         body {
             margin: 0;
@@ -38,11 +38,11 @@
 
     <div id="info">
         <h2>Entanglement-Entropy Relativity (EER)</h2>
-        <p>Stepped Topological Phase Exchange ($\pi^0$ Nucleon-Nucleon Interaction)</p>
+        <p>Confined Entangled Boundary & 2-Axis Pion Shear Defect Exchange</p>
     </div>
 
     <div id="status-panel">
-        Phase State: <span id="phaseStep" class="highlight">1. Accumulating Capacity Strain ($\Upsilon$)</span>
+        Boundary State: <span id="phaseStep" class="highlight">1. Locked Entangled Boundary (σ Strain Accumulation)</span>
     </div>
 
     <!-- Include Three.js & OrbitControls via CDN -->
@@ -87,69 +87,83 @@ const basePlane = new THREE.Mesh(planeGeometry, planeMaterial);
 basePlane.rotation.x = Math.PI / 2;
 scene.add(basePlane);
 
-// 2. Nucleons (Proton & Neutron)
-const protonGeo = new THREE.SphereGeometry(0.7, 32, 32);
-const protonMat = new THREE.MeshStandardMaterial({ color: 0xff7b72, emissive: 0xff7b72, emissiveIntensity: 0.3 });
-const proton = new THREE.Mesh(protonGeo, protonMat);
-proton.position.set(-5, 0, 0);
-scene.add(proton);
-
+// 2. Nucleons (Neutron & Proton)
 const neutronGeo = new THREE.SphereGeometry(0.7, 32, 32);
 const neutronMat = new THREE.MeshStandardMaterial({ color: 0x79c0ff, emissive: 0x79c0ff, emissiveIntensity: 0.3 });
 const neutron = new THREE.Mesh(neutronGeo, neutronMat);
-neutron.position.set(5, 0, 0);
+neutron.position.set(-5, 0, 0);
 scene.add(neutron);
 
-// 3. Topological Pion Packet ($\pi^0$)
-const pionGeo = new THREE.SphereGeometry(0.35, 24, 24);
-const pionMat = new THREE.MeshStandardMaterial({ color: 0xd2a8ff, emissive: 0xd2a8ff, emissiveIntensity: 0.9, transparent: true, opacity: 0.0 });
-const pionPacket = new THREE.Mesh(pionGeo, pionMat);
-pionPacket.position.set(-5, 0, 0);
-scene.add(pionPacket);
+const protonGeo = new THREE.SphereGeometry(0.7, 32, 32);
+const protonMat = new THREE.MeshStandardMaterial({ color: 0xff7b72, emissive: 0xff7b72, emissiveIntensity: 0.3 });
+const proton = new THREE.Mesh(protonGeo, protonMat);
+proton.position.set(5, 0, 0);
+scene.add(proton);
 
-// Stepped Simulation State Engine
+// 3. Shared Entangled Boundary Link (The confined topological bridge between nucleons)
+const bridgeGeo = new THREE.CylinderGeometry(0.12, 0.12, 10, 16);
+const bridgeMat = new THREE.MeshBasicMaterial({ color: 0x1f6feb, transparent: true, opacity: 0.4 });
+const entangledBridge = new THREE.Mesh(bridgeGeo, bridgeMat);
+entangledBridge.rotation.z = Math.PI / 2;
+entangledBridge.position.set(0, 0, 0);
+scene.add(entangledBridge);
+
+// 4. 2-Axis Pion Shear Defect (The twisted phase packet emerging from the boundary)
+const pionGeo = new THREE.BoxGeometry(0.5, 0.5, 0.5); // Box geometry highlights 2-axis shear/twist
+const pionMat = new THREE.MeshStandardMaterial({ color: 0xd2a8ff, emissive: 0xd2a8ff, emissiveIntensity: 0.9, wireframe: true });
+const pionShearDefect = new THREE.Mesh(pionGeo, pionMat);
+scene.add(pionShearDefect);
+
+// Simulation State Engine
 let clock = 0;
 const statusText = document.getElementById('phaseStep');
 
 function animate() {
     requestAnimationFrame(animate);
     clock += 0.012;
-    let cycle = clock % 6.0; // 6-second total exchange loop
+    let cycle = clock % 6.0;
+
+    // Pulse the shared entangled boundary wireframe opacity to indicate active topological locking
+    entangledBridge.material.opacity = 0.2 + 0.3 * Math.abs(Math.sin(clock * 2));
 
     if (cycle < 1.5) {
-        // STEP 1: Capacity Accumulation
-        statusText.innerText = "1. Accumulating Capacity Strain (σ approaching σ_LB)";
-        protonMat.emissiveIntensity = 0.3 + (cycle / 1.5) * 0.7; // Pulsing glow
-        pionMat.opacity = 0.0;
-        pionPacket.position.set(-5, 0, 0);
+        // STEP 1: Capacity strain accumulation within the shared boundary
+        statusText.innerText = "1. Shared Entangled Boundary: Local Capacity Strain (σ) approaching σ_LB";
+        neutronMat.emissiveIntensity = 0.3 + (cycle / 1.5) * 0.7;
+        pionMat.wireframe = true;
+        pionShearDefect.visible = false;
     } 
     else if (cycle < 2.0) {
-        // STEP 2: LeBlanc Bound Saturation & Instantiation
-        statusText.innerText = "2. Saturation Reached: Instantiating Discrete Pion Packet (π⁰)";
-        protonMat.emissiveIntensity = 1.0;
-        pionMat.opacity = 1.0;
-        pionPacket.position.set(-5, 0.5, 0);
+        // STEP 2: LeBlanc Bound Saturation -> 2-Axis Shear Defect Emergence from Neutron
+        statusText.innerText = "2. Boundary Saturation: 2-Axis Shear Defect (π⁰) Shed from Neutron";
+        neutronMat.emissiveIntensity = 1.0;
+        pionShearDefect.visible = true;
+        pionShearDefect.position.set(-5, 0, 0);
+        pionShearDefect.rotation.set(0, 0, 0);
     } 
     else if (cycle < 4.0) {
-        // STEP 3: Bounded Step Transit across Pseudomanifold Link
-        statusText.innerText = "3. Deterministic Phase Transfer across Pseudomanifold Link (Bounded by c)";
+        // STEP 3: Propagation along the Confined Entangled Boundary
+        statusText.innerText = "3. Propagation of 2-Axis Phase Shear across Shared Entanglement Network";
         let progress = (cycle - 2.0) / 2.0;
         let x = THREE.MathUtils.lerp(-5, 5, progress);
-        let y = Math.sin(progress * Math.PI) * 2.5; // Orthogonal action relief arc
-        pionPacket.position.set(x, y, 0);
-        protonMat.emissiveIntensity = 0.3;
+        
+        // Spin the box to visually demonstrate 2-axis topological shear/twist
+        pionShearDefect.position.set(x, 0, 0);
+        pionShearDefect.rotation.x += 0.08;
+        pionShearDefect.rotation.y += 0.08;
+        neutronMat.emissiveIntensity = 0.3;
     } 
     else if (cycle < 4.5) {
-        // STEP 4: Target Re-indexing & Absorption
-        statusText.innerText = "4. Target Node Reception: Re-indexing Internal Topological State";
-        pionPacket.position.set(5, 0.5, 0);
-        neutronMat.emissiveIntensity = 1.0;
+        // STEP 4: Proton Absorption & Re-indexing
+        statusText.innerText = "4. Proton Boundary Absorption: Internal Topological State Re-indexed";
+        pionShearDefect.position.set(5, 0, 0);
+        protonMat.emissiveIntensity = 1.0;
     } 
     else {
-        // STEP 5: Reset / Settle
-        statusText.innerText = "5. Lattice Relaxation & State Resolved";
-        pionMat.opacity = 0.0;
-        neutronMat.emissiveIntensity = 0.3;
+        // STEP 5: Lattice Relaxation
+        statusText.innerText = "5. Boundary Restabilized & Capacity State Resolved";
+        pionShearDefect.visible = false;
+        protonMat.emissiveIntensity = 0.3;
     }
 
     controls.update();
