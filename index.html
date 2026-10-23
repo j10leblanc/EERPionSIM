@@ -24,25 +24,31 @@
             position: absolute;
             bottom: 20px;
             left: 20px;
-            background: rgba(13, 17, 23, 0.85);
+            max-width: 420px;
+            background: rgba(13, 17, 23, 0.9);
             border: 1px solid #30363d;
-            padding: 12px 18px;
+            padding: 14px 18px;
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 12px;
+            line-height: 1.4;
             pointer-events: none;
         }
-        .highlight { color: #d2a8ff; font-weight: bold; }
+        .highlight { color: #d2a8ff; font-weight: bold; display: block; margin-bottom: 6px; font-size: 13px; }
+        .heuristic-note { color: #8b949e; font-style: italic; border-top: 1px solid #21262d; padding-top: 6px; margin-top: 6px; }
     </style>
 </head>
 <body>
 
     <div id="info">
         <h2>Entanglement-Entropy Relativity (EER)</h2>
-        <p>Sequential Pion Instantiation, Travel, Absorption & Role Reversal</p>
+        <p>Topological Eigenvalue Exchange & Nucleon Role Reversal</p>
     </div>
 
     <div id="status-panel">
-        Phase State: <span id="phaseStep" class="highlight">1. Initial State</span>
+        <span id="phaseStep" class="highlight">1. Strain building toward LeBlanc Bound saturation</span>
+        <div class="heuristic-note">
+            <strong>Note:</strong> Because pure discrete lattice eigenvalue re-indexing and multi-axis boundary constraints exist outside continuous spatial dimensions, this 3D animation serves as a visual proxy mapping boundary phase shifts as an intuitive transit.
+        </div>
     </div>
 
     <!-- Include Three.js & OrbitControls via CDN -->
@@ -110,7 +116,7 @@ sharedBoundary.rotation.z = Math.PI / 2;
 sharedBoundary.position.set(0, 0, 0);
 scene.add(sharedBoundary);
 
-// Pion Shear Defect
+// Pion Shear Defect Proxy
 const pionGeo = new THREE.BoxGeometry(0.4, 0.4, 0.4); 
 const pionMat = new THREE.MeshStandardMaterial({ color: 0xd2a8ff, emissive: 0xd2a8ff, emissiveIntensity: 0.9, wireframe: true });
 const pion = new THREE.Mesh(pionGeo, pionMat);
@@ -123,9 +129,8 @@ const statusText = document.getElementById('phaseStep');
 function animate() {
     requestAnimationFrame(animate);
     clock += 0.012;
-    let cycle = clock % 8.0; // 8-second total loop
+    let cycle = clock % 8.0;
 
-    // Keep track of current color assignments based on cycle state
     let isSwapped = cycle >= 4.5 && cycle < 7.5;
     
     if (!isSwapped) {
@@ -141,19 +146,16 @@ function animate() {
     }
 
     if (cycle < 1.5) {
-        // STEP 1: Strain accumulation
         statusText.innerText = "1. Strain building toward LeBlanc Bound saturation";
         pion.visible = false;
     } 
     else if (cycle < 2.0) {
-        // STEP 2: Pion instantiates above the neutron
-        statusText.innerText = "2. Pion instantiates above the neutron";
+        statusText.innerText = "2. Phase defect instantiates at boundary interface";
         pion.visible = true;
-        pion.position.set(-1.1, 1.5, 0); // Positioned directly above neutron
+        pion.position.set(-1.1, 1.5, 0);
     } 
     else if (cycle < 4.0) {
-        // STEP 3: Pion travels to the proton
-        statusText.innerText = "3. Pion travels across the arc toward the proton";
+        statusText.innerText = "3. Eigenvalue re-indexing propagates across boundary matrix";
         let progress = (cycle - 2.0) / 2.0;
         let x = THREE.MathUtils.lerp(-1.1, 1.1, progress);
         let y = 1.5 + Math.sin(progress * Math.PI) * 0.8;
@@ -161,23 +163,19 @@ function animate() {
         pion.rotation.x += 0.1;
     } 
     else if (cycle < 4.5) {
-        // STEP 4: Pion is absorbed by the proton, colors switch
-        statusText.innerText = "4. Pion is absorbed by the proton — colors switch";
+        statusText.innerText = "4. Eigenvalue absorbed — structural role reversal complete";
         pion.position.set(1.1, 1.5, 0);
         
-        // Force swap state immediately upon absorption
         neutronLobe.material.color.setHex(0xff7b72);
         neutronLobe.material.emissive.setHex(0xff7b72);
         protonLobe.material.color.setHex(0x79c0ff);
         protonLobe.material.emissive.setHex(0x79c0ff);
     } 
     else if (cycle < 7.5) {
-        // STEP 5: Settled in swapped state
-        statusText.innerText = "5. Roles reversed (Neutron ⟷ Proton)";
+        statusText.innerText = "5. Bound eigenstates resolved in swapped configuration";
         pion.visible = false;
     } 
     else {
-        // Reset for next loop iteration
         statusText.innerText = "Resetting boundary state...";
     }
 
