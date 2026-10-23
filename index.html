@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EER: Unified Nucleon Lobes & Shared Boundary Defect</title>
+    <title>EER: Pion Arc Exchange & Nucleon Role Reversal</title>
     <style>
         body {
             margin: 0;
@@ -38,11 +38,11 @@
 
     <div id="info">
         <h2>Entanglement-Entropy Relativity (EER)</h2>
-        <p>Unified Nucleon Lobes & Shared Entangled Boundary Matrix</p>
+        <p>Orthogonal Pion Arc & Deterministic Nucleon Role Reversal</p>
     </div>
 
     <div id="status-panel">
-        Boundary State: <span id="phaseStep" class="highlight">1. Shared Boundary Strain Accumulation (σ approaching σ_LB)</span>
+        Boundary State: <span id="phaseStep" class="highlight">1. Strain Accumulation in Shared Boundary</span>
     </div>
 
     <!-- Include Three.js & OrbitControls via CDN -->
@@ -87,22 +87,22 @@ const basePlane = new THREE.Mesh(planeGeometry, planeMaterial);
 basePlane.rotation.x = Math.PI / 2;
 scene.add(basePlane);
 
-// 2. Unified Nucleon Lobes (Overlapping geometry with a central shared boundary)
+// 2. Unified Nucleon Lobes
 const lobeGeo = new THREE.SphereGeometry(1.2, 32, 32);
 
-// Neutron Lobe (Left)
-const neutronMat = new THREE.MeshStandardMaterial({ color: 0x79c0ff, emissive: 0x79c0ff, emissiveIntensity: 0.3, roughness: 0.3 });
-const neutronLobe = new THREE.Mesh(lobeGeo, neutronMat);
-neutronLobe.position.set(-1.1, 0, 0);
-scene.add(neutronLobe);
+// Left Lobe (Starts as Neutron - Blue)
+const leftMat = new THREE.MeshStandardMaterial({ color: 0x79c0ff, emissive: 0x79c0ff, emissiveIntensity: 0.3, roughness: 0.3 });
+const leftLobe = new THREE.Mesh(lobeGeo, leftMat);
+leftLobe.position.set(-1.1, 0, 0);
+scene.add(leftLobe);
 
-// Proton Lobe (Right)
-const protonMat = new THREE.MeshStandardMaterial({ color: 0xff7b72, emissive: 0xff7b72, emissiveIntensity: 0.3, roughness: 0.3 });
-const protonLobe = new THREE.Mesh(lobeGeo, protonMat);
-protonLobe.position.set(1.1, 0, 0);
-scene.add(protonLobe);
+// Right Lobe (Starts as Proton - Red)
+const rightMat = new THREE.MeshStandardMaterial({ color: 0xff7b72, emissive: 0xff7b72, emissiveIntensity: 0.3, roughness: 0.3 });
+const rightLobe = new THREE.Mesh(lobeGeo, rightMat);
+rightLobe.position.set(1.1, 0, 0);
+scene.add(rightLobe);
 
-// Central Shared Boundary Manifold (The intersection area where lobes merge)
+// Central Shared Boundary Manifold
 const boundaryGeo = new THREE.CylinderGeometry(0.9, 0.9, 0.8, 32);
 const boundaryMat = new THREE.MeshStandardMaterial({ color: 0x1f6feb, emissive: 0x1f6feb, emissiveIntensity: 0.5, transparent: true, opacity: 0.6 });
 const sharedBoundary = new THREE.Mesh(boundaryGeo, boundaryMat);
@@ -110,11 +110,11 @@ sharedBoundary.rotation.z = Math.PI / 2;
 sharedBoundary.position.set(0, 0, 0);
 scene.add(sharedBoundary);
 
-// 3. 2-Axis Pion Shear Defect (Emerging directly from the shared boundary)
-const pionGeo = new THREE.BoxGeometry(0.5, 0.5, 0.5); 
+// 3. 2-Axis Pion Shear Defect (Arting Packet)
+const pionGeo = new THREE.BoxGeometry(0.4, 0.4, 0.4); 
 const pionMat = new THREE.MeshStandardMaterial({ color: 0xd2a8ff, emissive: 0xd2a8ff, emissiveIntensity: 0.9, wireframe: true });
-const pionShearDefect = new THREE.Mesh(pionGeo, pionMat);
-scene.add(pionShearDefect);
+const pionDefect = new THREE.Mesh(pionGeo, pionMat);
+scene.add(pionDefect);
 
 // Simulation State Engine
 let clock = 0;
@@ -123,48 +123,59 @@ const statusText = document.getElementById('phaseStep');
 function animate() {
     requestAnimationFrame(animate);
     clock += 0.012;
-    let cycle = clock % 6.0;
+    let cycle = clock % 8.0; // 8-second full loop including state swap and return arc
 
-    // Pulse shared boundary intensity to show entropic pressure
     boundaryMat.emissiveIntensity = 0.3 + 0.5 * Math.abs(Math.sin(clock * 2));
 
     if (cycle < 1.5) {
-        // STEP 1: Strain Accumulation in the Shared Boundary
-        statusText.innerText = "1. Shared Boundary Zone: Capacity Strain (σ) approaching LeBlanc Bound (σ_LB)";
-        neutronLobe.material.emissiveIntensity = 0.3 + (cycle / 1.5) * 0.6;
-        pionShearDefect.visible = false;
+        // STEP 1: Strain Accumulation
+        statusText.innerText = "1. Shared Boundary: Capacity Strain (σ) Approaching LeBlanc Bound";
+        leftLobe.material.emissiveIntensity = 0.3 + (cycle / 1.5) * 0.6;
+        pionDefect.visible = false;
     } 
     else if (cycle < 2.0) {
-        // STEP 2: Saturation Trigger -> 2-Axis Shear Defect Emerges from Boundary
-        statusText.innerText = "2. Boundary Saturation: 2-Axis Pion Shear Defect Ejects from Shared Interface";
-        neutronLobe.material.emissiveIntensity = 0.9;
-        pionShearDefect.visible = true;
-        pionShearDefect.position.set(0, 0, 0);
-        pionShearDefect.rotation.set(0, 0, 0);
+        // STEP 2: Instantiation above Neutron Lobe
+        statusText.innerText = "2. Saturation: Pion Shear Defect Instantiates Above Neutron Lobe";
+        leftLobe.material.emissiveIntensity = 1.0;
+        pionDefect.visible = true;
+        pionDefect.position.set(-1.1, 1.2, 0);
     } 
     else if (cycle < 4.0) {
-        // STEP 3: Boundary-Restructuring Shift (Defect shears across the internal topology)
-        statusText.innerText = "3. Topological Shear: Phase Defect Re-indexing across the Entangled Interface";
+        // STEP 3: Upward Arc Across the Shared Boundary to Proton Lobe
+        statusText.innerText = "3. Orthogonal Arc: Defect Shears Across Upper Entangled Boundary";
         let progress = (cycle - 2.0) / 2.0;
-        let x = THREE.MathUtils.lerp(0, 1.1, progress); // Shifts toward proton lobe region
-        let y = Math.sin(progress * Math.PI) * 0.8; // Minor orthogonal relief swell
+        let x = THREE.MathUtils.lerp(-1.1, 1.1, progress);
+        let y = 1.2 + Math.sin(progress * Math.PI) * 1.5; // Parabolic arc above the lobes
         
-        pionShearDefect.position.set(x, y, 0);
-        pionShearDefect.rotation.x += 0.1;
-        pionShearDefect.rotation.y += 0.1;
-        neutronLobe.material.emissiveIntensity = 0.3;
+        pionDefect.position.set(x, y, 0);
+        pionDefect.rotation.x += 0.1;
+        pionDefect.rotation.y += 0.1;
+        leftLobe.material.emissiveIntensity = 0.3;
     } 
     else if (cycle < 4.5) {
-        // STEP 4: Proton Lobe Absorption & State Shift
-        statusText.innerText = "4. Proton Lobe Absorption: Internal Phase State Re-indexed";
-        pionShearDefect.position.set(1.1, 0, 0);
-        protonLobe.material.emissiveIntensity = 1.0;
+        // STEP 4: Absorption & Topological Role Reversal
+        statusText.innerText = "4. Absorption & Re-indexing: Nucleon Identities Flip (n ⟷ p)";
+        pionDefect.position.set(1.1, 1.2, 0);
+        rightLobe.material.emissiveIntensity = 1.0;
+
+        // Perform color/role swap
+        leftLobe.material.color.setHex(0xff7b72); // Neutron becomes Proton
+        leftLobe.material.emissive.setHex(0xff7b72);
+        rightLobe.material.color.setHex(0x79c0ff); // Proton becomes Neutron
+        rightLobe.material.emissive.setHex(0x79c0ff);
+    } 
+    else if (cycle < 7.5) {
+        // STEP 5: Settled in Swapped State
+        statusText.innerText = "5. Entangled Boundary Relaxed in Swapped Configuration";
+        pionDefect.visible = false;
+        rightLobe.material.emissiveIntensity = 0.3;
     } 
     else {
-        // STEP 5: Relaxation of Shared Boundary Matrix
-        statusText.innerText = "5. Entangled Boundary Matrix Restabilized";
-        pionShearDefect.visible = false;
-        protonLobe.material.emissiveIntensity = 0.3;
+        // Reset colors for continuous looping visualization
+        leftLobe.material.color.setHex(0x79c0ff);
+        leftLobe.material.emissive.setHex(0x79c0ff);
+        rightLobe.material.color.setHex(0xff7b72);
+        rightLobe.material.emissive.setHex(0xff7b72);
     }
 
     controls.update();
