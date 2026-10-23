@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EER: Deterministic Pion Exchange & Topological Phase</title>
+    <title>EER: Stepped Deterministic Pion Exchange</title>
     <style>
         body {
             margin: 0;
@@ -20,24 +20,30 @@
         }
         h2 { margin: 0 0 5px 0; color: #58a6ff; font-size: 20px; text-shadow: 0 0 10px rgba(88,166,255,0.4); }
         p { margin: 0; font-size: 13px; color: #8b949e; }
-        .controls-hint {
+        #status-panel {
             position: absolute;
-            bottom: 15px;
+            bottom: 20px;
             left: 20px;
-            font-size: 12px;
-            color: #6e7681;
+            background: rgba(13, 17, 23, 0.85);
+            border: 1px solid #30363d;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 13px;
             pointer-events: none;
         }
+        .highlight { color: #d2a8ff; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="info">
         <h2>Entanglement-Entropy Relativity (EER)</h2>
-        <p>Deterministic Pion ($\pi^0$) Exchange: Topological Phase Shift on Planar Action Space</p>
+        <p>Stepped Topological Phase Exchange ($\pi^0$ Nucleon-Nucleon Interaction)</p>
     </div>
-    
-    <div class="controls-hint">Use mouse to rotate, pan, and zoom around the pseudomanifold grid.</div>
+
+    <div id="status-panel">
+        Phase State: <span id="phaseStep" class="highlight">1. Accumulating Capacity Strain ($\Upsilon$)</span>
+    </div>
 
     <!-- Include Three.js & OrbitControls via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -68,7 +74,7 @@ const pointLight = new THREE.PointLight(0x58a6ff, 2, 50);
 pointLight.position.set(0, 10, 0);
 scene.add(pointLight);
 
-// 1. Create the 2D Causal Pseudomanifold (Planar Action Space Grid)
+// 1. Grid Substrate
 const gridSize = 20;
 const gridDivisions = 20;
 const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, 0x1f6feb, 0x161b22);
@@ -76,67 +82,75 @@ gridHelper.position.y = 0;
 scene.add(gridHelper);
 
 const planeGeometry = new THREE.PlaneGeometry(gridSize, gridSize);
-const planeMaterial = new THREE.MeshBasicMaterial({
-    color: 0x0d1117,
-    side: THREE.DoubleSide,
-    transparent: true,
-    opacity: 0.85
-});
+const planeMaterial = new THREE.MeshBasicMaterial({ color: 0x0d1117, side: THREE.DoubleSide, transparent: true, opacity: 0.85 });
 const basePlane = new THREE.Mesh(planeGeometry, planeMaterial);
 basePlane.rotation.x = Math.PI / 2;
 scene.add(basePlane);
 
-// 2. Create Nucleons (Proton & Neutron)
-// Proton (Red - positive/charged capacity state)
+// 2. Nucleons (Proton & Neutron)
 const protonGeo = new THREE.SphereGeometry(0.7, 32, 32);
-const protonMat = new THREE.MeshStandardMaterial({ color: 0xff7b72, emissive: 0xff7b72, emissiveIntensity: 0.5 });
+const protonMat = new THREE.MeshStandardMaterial({ color: 0xff7b72, emissive: 0xff7b72, emissiveIntensity: 0.3 });
 const proton = new THREE.Mesh(protonGeo, protonMat);
 proton.position.set(-5, 0, 0);
 scene.add(proton);
 
-// Neutron (Blue/Cyan - neutral capacity state)
 const neutronGeo = new THREE.SphereGeometry(0.7, 32, 32);
-const neutronMat = new THREE.MeshStandardMaterial({ color: 0x79c0ff, emissive: 0x79c0ff, emissiveIntensity: 0.5 });
+const neutronMat = new THREE.MeshStandardMaterial({ color: 0x79c0ff, emissive: 0x79c0ff, emissiveIntensity: 0.3 });
 const neutron = new THREE.Mesh(neutronGeo, neutronMat);
 neutron.position.set(5, 0, 0);
 scene.add(neutron);
 
-// 3. Create the Topological Pion Packet ($\pi^0$)
+// 3. Topological Pion Packet ($\pi^0$)
 const pionGeo = new THREE.SphereGeometry(0.35, 24, 24);
-const pionMat = new THREE.MeshStandardMaterial({ color: 0xd2a8ff, emissive: 0xd2a8ff, emissiveIntensity: 0.9 });
+const pionMat = new THREE.MeshStandardMaterial({ color: 0xd2a8ff, emissive: 0xd2a8ff, emissiveIntensity: 0.9, transparent: true, opacity: 0.0 });
 const pionPacket = new THREE.Mesh(pionGeo, pionMat);
+pionPacket.position.set(-5, 0, 0);
 scene.add(pionPacket);
 
-// Simulation State Variables for Back-and-Forth Phase Exchange
-let exchangeProgress = 0;
-let exchangeDirection = 1; // 1: Proton -> Neutron, -1: Neutron -> Proton
-const exchangeSpeed = 0.015;
+// Stepped Simulation State Engine
+let clock = 0;
+const statusText = document.getElementById('phaseStep');
 
-// Animation Loop (Deterministic Phase Transfer & Orthogonal Venting)
 function animate() {
     requestAnimationFrame(animate);
+    clock += 0.012;
+    let cycle = clock % 6.0; // 6-second total exchange loop
 
-    // Update exchange progress across the pseudomanifold link
-    exchangeProgress += exchangeSpeed * exchangeDirection;
-
-    // Reverse direction at endpoints (representing continuous reciprocal $\pi^0$ exchange)
-    if (exchangeProgress >= 1.0) {
-        exchangeProgress = 1.0;
-        exchangeDirection = -1;
-    } else if (exchangeProgress <= 0.0) {
-        exchangeProgress = 0.0;
-        exchangeDirection = 1;
+    if (cycle < 1.5) {
+        // STEP 1: Capacity Accumulation
+        statusText.innerText = "1. Accumulating Capacity Strain (σ approaching σ_LB)";
+        protonMat.emissiveIntensity = 0.3 + (cycle / 1.5) * 0.7; // Pulsing glow
+        pionMat.opacity = 0.0;
+        pionPacket.position.set(-5, 0, 0);
+    } 
+    else if (cycle < 2.0) {
+        // STEP 2: LeBlanc Bound Saturation & Instantiation
+        statusText.innerText = "2. Saturation Reached: Instantiating Discrete Pion Packet (π⁰)";
+        protonMat.emissiveIntensity = 1.0;
+        pionMat.opacity = 1.0;
+        pionPacket.position.set(-5, 0.5, 0);
+    } 
+    else if (cycle < 4.0) {
+        // STEP 3: Bounded Step Transit across Pseudomanifold Link
+        statusText.innerText = "3. Deterministic Phase Transfer across Pseudomanifold Link (Bounded by c)";
+        let progress = (cycle - 2.0) / 2.0;
+        let x = THREE.MathUtils.lerp(-5, 5, progress);
+        let y = Math.sin(progress * Math.PI) * 2.5; // Orthogonal action relief arc
+        pionPacket.position.set(x, y, 0);
+        protonMat.emissiveIntensity = 0.3;
+    } 
+    else if (cycle < 4.5) {
+        // STEP 4: Target Re-indexing & Absorption
+        statusText.innerText = "4. Target Node Reception: Re-indexing Internal Topological State";
+        pionPacket.position.set(5, 0.5, 0);
+        neutronMat.emissiveIntensity = 1.0;
+    } 
+    else {
+        // STEP 5: Reset / Settle
+        statusText.innerText = "5. Lattice Relaxation & State Resolved";
+        pionMat.opacity = 0.0;
+        neutronMat.emissiveIntensity = 0.3;
     }
-
-    // Interpolate position along the discrete lattice link between proton and neutron
-    let currentX = THREE.MathUtils.lerp(-5, 5, exchangeProgress);
-    // Add a parabolic height arc in the 3D bulk projection to represent orthogonal action relief ($\Upsilon$)
-    let currentY = Math.sin(exchangeProgress * Math.PI) * 2.5; 
-
-    pionPacket.position.set(currentX, currentY, 0);
-
-    // Pulse emission intensity to mimic LeBlanc Bound ($\sigma_{LB}$) saturation triggering
-    pionMat.emissiveIntensity = 0.5 + 0.5 * Math.sin(exchangeProgress * Math.PI * 4);
 
     controls.update();
     renderer.render(scene, camera);
@@ -144,7 +158,6 @@ function animate() {
 
 animate();
 
-// Responsive resizing
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
